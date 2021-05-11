@@ -6,7 +6,6 @@ let calc = function () {
     let bstack = [];
     let invalid = "Invalid Input";
     let answer;
-    //let sign_p = ['^','-','+','/','*'];
 
     //THIS FUNCTION SETS THE ACCURACY OF THE RETURNED ANSWER (NO. OF DECIMAL PLACES)
     let setPrecision = function () {
@@ -17,32 +16,266 @@ let calc = function () {
         }
     }
 
-    let isMatchingBrackets = function (str) {
-        let stack = [];
-        let map = {
-            '(': ')',
-            '[': ']',
-            '{': '}'
+    //THIS FUNCTION RETURNS THE SUM OF ARG1 AND ARG2 (ARG1 + ARG2)
+    let addition = function (arg1, arg2) {
+        if (isNaN(Number(arg1) + Number(arg2))) {
+            console.log(invalid);
+            calc();
         }
+        else {
+            return (Number(arg1) + Number(arg2));
+        }
+    }
 
-        for (let i = 0; i < str.length; i++) {
+    //THIS FUNCTION RETURNS THE DIFFERENCE BETWEEN ARG1 AND ARG2 (ARG1 - ARG2)
+    let subtraction = function (arg1, arg2) {
+        if (isNaN(Number(arg1) - Number(arg2))) {
+            console.log(invalid);
+            calc();
+        }
+        else {
+            return (Number(arg1) - Number(arg2));
+        }
+    }
 
-            // If character is an opening brace add it to a stack
-            if (str[i] === '(' || str[i] === '{' || str[i] === '[') {
-                stack.push(str[i]);
+    //THIS FUNCTION RETURNS THE PRODUCT OF ARG1 AND ARG2 (ARG1 * ARG2)
+    let multiplication = function (arg1, arg2) {
+        if (isNaN(Number(arg1) * Number(arg2))) {
+            console.log(invalid);
+            calc();
+        }
+        else {
+            return (Number(arg1) * Number(arg2));
+        }
+    }
+
+    //THIS FUNCTION CARRIES OUT DIVISION (ARG1 / ARG2)
+    let division = function (arg1, arg2) {
+        if (isNaN(Number(arg1) / Number(arg2))) {
+            console.log(invalid);
+            calc();
+        }
+        else {
+            return (Number(arg1) / Number(arg2));
+        }
+    }
+
+    //THIS FUNCTION RETURNS ARG1 TO THE POWER ARG2 (ARG1 ^ ARG2)
+    let exponent = function (arg1, arg2) {
+        if (isNaN(Math.pow(Number(arg1), Number(arg2)))) {
+            console.log(invalid);
+            calc();
+        }
+        else {
+            return (Math.pow(Number(arg1), Number(arg2)));
+        }
+    }
+
+    //THS FUCNTION CARRIES OUT THE ACTUAL CALCULATION
+    let solve = function () {
+
+        //IF THE STRING HAS MORE THAN TWO BUT LESS THAN FOUR ARGUMENTS
+        if (signs.length > 1) {
+            //ORDER OF APPEARANCE
+            //EXPONENT FIRST
+            if (signs[0] === "^" && signs[1] === "^") {
+                result1 = exponent(values[1], values[2])
+                result2 = exponent(values[0], result1);
+
+                return result2;
+
             }
-            //  If that character is a closing brace, pop from the stack, which will also reduce the length of the stack each time a closing bracket is encountered.
+            else if (signs[0] === "^" && signs[1] === "-") {
+                result1 = exponent(values[0], values[1])
+                result2 = subtraction(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "^" && signs[1] === "+") {
+                result1 = exponent(values[0], values[1])
+                result2 = addition(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "^" && signs[1] === "/") {
+                result1 = division(values[1], values[2])
+                result2 = exponent(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "^" && signs[1] === "*") {
+                result1 = multiplication(values[1], values[2])
+                result2 = exponent(result1, values[2]);
+
+                return result2;
+            }
+            //SUBTRACTION FIRST
+            else if (signs[0] === "-" && signs[1] === "^") {
+                result1 = exponent(values[1], values[2])
+                result2 = subtraction(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "-" && signs[1] === "-") {
+                result1 = subtraction(values[0], values[1])
+                result2 = subtraction(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "-" && signs[1] === "+") {
+                result1 = addition(values[1], values[2])
+                result2 = subtraction(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "-" && signs[1] === "/") {
+                result1 = division(values[1], values[2])
+                result2 = subtraction(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "-" && signs[1] === "*") {
+                result1 = multiplication(values[1], values[2])
+                result2 = subtraction(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "-" && signs[1] === "*") {
+                result1 = multiplication(values[1], values[2])
+                result2 = subtraction(values[0], result1);
+
+                return result2;
+            }
+            //ADDITION FIRST
+            else if (signs[0] === "+" && signs[1] === "^") {
+                result1 = exponent(values[1], values[2])
+                result2 = addition(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "+" && signs[1] === "-") {
+                result1 = addition(values[0], values[1])
+                result2 = subtraction(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "+" && signs[1] === "+") {
+                result1 = addition(values[0], values[1])
+                result2 = addition(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "+" && signs[1] === "/") {
+                result1 = division(values[1], values[2])
+                result2 = addition(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "+" && signs[1] === "*") {
+                result1 = multiplication(values[1], values[2])
+                result2 = addition(values[0], result1);
+
+                return result2;
+            }
+            //DIVISION FIRST
+            else if (signs[0] === "/" && signs[1] === "^") {
+                result1 = exponent(values[1], values[2])
+                result2 = division(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "/" && signs[1] === "-") {
+                result1 = division(values[0], values[1])
+                result2 = subtraction(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "/" && signs[1] === "+") {
+                result1 = division(values[0], values[1])
+                result2 = addition(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "/" && signs[1] === "/") {
+                result1 = division(values[0], values[1])
+                result2 = division(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "/" && signs[1] === "*") {
+                result1 = division(values[0], values[1])
+                result2 = multiplication(result1, values[2]);
+
+                return result2;
+            }
+            //MULTIPLICATON FIRST
+            else if (signs[0] === "*" && signs[1] === "^") {
+                result1 = exponent(values[1], values[2])
+                result2 = multiplication(values[0], result1);
+
+                return result2;
+            }
+            else if (signs[0] === "*" && signs[1] === "-") {
+                result1 = multiplication(values[0], values[1])
+                result2 = subtraction(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "*" && signs[1] === "+") {
+                result1 = multiplication(values[0], values[1])
+                result2 = addition(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "*" && signs[1] === "/") {
+                result1 = multiplication(values[0], values[1])
+                result2 = division(result1, values[2]);
+
+                return result2;
+            }
+            else if (signs[0] === "*" && signs[1] === "*") {
+                result1 = multiplication(values[0], values[1])
+                result2 = multiplication(result1, values[2]);
+
+                return result2;
+            }
             else {
-                let last = stack.pop();
-
-                //If the popped element from the stack, which is the last opening brace doesn’t match the corresponding closing brace in the map, then return false
-                if (str[i] !== map[last]) { return false };
+                console.log("One or both symbol(s) given is NOT an operator!")
             }
         }
-        // By the completion of the for loop after checking all the brackets of the str, at the end, if the stack is not empty then fail
-        if (stack.length !== 0) { return false };
+        //IF THE STRING HAS ONLY TWO ARGUMENTS
+        else {
+            if (signs[0] === "^") {
+                result2 = exponent(values[0], values[1]);
 
-        return true;
+                return result2;
+            }
+            else if (signs[0] === "-") {
+                result2 = subtraction(values[0], values[1]);
+
+                return result2;
+            }
+            else if (signs[0] === "+") {
+                result2 = addition(values[0], values[1]);
+
+                return result2;
+            }
+            else if (signs[0] === "/") {
+                result2 = division(values[0], values[1]);
+
+                return result2;
+            }
+            else if (signs[0] === "*") {
+                result2 = multiplication(values[0], values[1]);
+
+                return result2;
+            }
+            else {
+                console.log("Symbol given is NOT an operator!")
+            }
+        }
+
+        //return result2
     }
 
     //THIS FUNCTION PARSES THE STRING THAT HAS BEEN INPUT BY THE USER AND SPLITS INTO NUMBERS AND SYMBOLS.IT ALSO TERMINATES THE PROGRAM
@@ -1406,268 +1639,6 @@ let calc = function () {
         //console.log(signs);
     }
 
-    //THIS FUNCTION RETURNS THE SUM OF ARG1 AND ARG2 (ARG1 + ARG2)
-    let addition = function (arg1, arg2) {
-        if (isNaN(Number(arg1) + Number(arg2))) {
-            console.log(invalid);
-            calc();
-        }
-        else {
-            return (Number(arg1) + Number(arg2));
-        }
-    }
-
-    //THIS FUNCTION RETURNS THE DIFFERENCE BETWEEN ARG1 AND ARG2 (ARG1 - ARG2)
-    let subtraction = function (arg1, arg2) {
-        if (isNaN(Number(arg1) - Number(arg2))) {
-            console.log(invalid);
-            calc();
-        }
-        else {
-            return (Number(arg1) - Number(arg2));
-        }
-    }
-
-    //THIS FUNCTION RETURNS THE PRODUCT OF ARG1 AND ARG2 (ARG1 * ARG2)
-    let multiplication = function (arg1, arg2) {
-        if (isNaN(Number(arg1) * Number(arg2))) {
-            console.log(invalid);
-            calc();
-        }
-        else {
-            return (Number(arg1) * Number(arg2));
-        }
-    }
-
-    //THIS FUNCTION CARRIES OUT DIVISION (ARG1 / ARG2)
-    let division = function (arg1, arg2) {
-        if (isNaN(Number(arg1) / Number(arg2))) {
-            console.log(invalid);
-            calc();
-        }
-        else {
-            return (Number(arg1) / Number(arg2));
-        }
-    }
-
-    //THIS FUNCTION RETURNS ARG1 TO THE POWER ARG2 (ARG1 ^ ARG2)
-    let exponent = function (arg1, arg2) {
-        if (isNaN(Math.pow(Number(arg1), Number(arg2)))) {
-            console.log(invalid);
-            calc();
-        }
-        else {
-            return (Math.pow(Number(arg1), Number(arg2)));
-        }
-    }
-
-    //THS FUCNTION CARRIES OUT THE ACTUAL CALCULATION
-    let solve = function () {
-
-        //IF THE STRING HAS MORE THAN TWO BUT LESS THAN FOUR ARGUMENTS
-        if (signs.length > 1) {
-            //ORDER OF APPEARANCE
-            //EXPONENT FIRST
-            if (signs[0] === "^" && signs[1] === "^") {
-                result1 = exponent(values[1], values[2])
-                result2 = exponent(values[0], result1);
-
-                return result2;
-
-            }
-            else if (signs[0] === "^" && signs[1] === "-") {
-                result1 = exponent(values[0], values[1])
-                result2 = subtraction(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "^" && signs[1] === "+") {
-                result1 = exponent(values[0], values[1])
-                result2 = addition(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "^" && signs[1] === "/") {
-                result1 = division(values[1], values[2])
-                result2 = exponent(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "^" && signs[1] === "*") {
-                result1 = multiplication(values[1], values[2])
-                result2 = exponent(result1, values[2]);
-
-                return result2;
-            }
-            //SUBTRACTION FIRST
-            else if (signs[0] === "-" && signs[1] === "^") {
-                result1 = exponent(values[1], values[2])
-                result2 = subtraction(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "-" && signs[1] === "-") {
-                result1 = subtraction(values[0], values[1])
-                result2 = subtraction(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "-" && signs[1] === "+") {
-                result1 = addition(values[1], values[2])
-                result2 = subtraction(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "-" && signs[1] === "/") {
-                result1 = division(values[1], values[2])
-                result2 = subtraction(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "-" && signs[1] === "*") {
-                result1 = multiplication(values[1], values[2])
-                result2 = subtraction(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "-" && signs[1] === "*") {
-                result1 = multiplication(values[1], values[2])
-                result2 = subtraction(values[0], result1);
-
-                return result2;
-            }
-            //ADDITION FIRST
-            else if (signs[0] === "+" && signs[1] === "^") {
-                result1 = exponent(values[1], values[2])
-                result2 = addition(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "+" && signs[1] === "-") {
-                result1 = addition(values[0], values[1])
-                result2 = subtraction(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "+" && signs[1] === "+") {
-                result1 = addition(values[0], values[1])
-                result2 = addition(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "+" && signs[1] === "/") {
-                result1 = division(values[1], values[2])
-                result2 = addition(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "+" && signs[1] === "*") {
-                result1 = multiplication(values[1], values[2])
-                result2 = addition(values[0], result1);
-
-                return result2;
-            }
-            //DIVISION FIRST
-            else if (signs[0] === "/" && signs[1] === "^") {
-                result1 = exponent(values[1], values[2])
-                result2 = division(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "/" && signs[1] === "-") {
-                result1 = division(values[0], values[1])
-                result2 = subtraction(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "/" && signs[1] === "+") {
-                result1 = division(values[0], values[1])
-                result2 = addition(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "/" && signs[1] === "/") {
-                result1 = division(values[0], values[1])
-                result2 = division(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "/" && signs[1] === "*") {
-                result1 = division(values[0], values[1])
-                result2 = multiplication(result1, values[2]);
-
-                return result2;
-            }
-            //MULTIPLICATON FIRST
-            else if (signs[0] === "*" && signs[1] === "^") {
-                result1 = exponent(values[1], values[2])
-                result2 = multiplication(values[0], result1);
-
-                return result2;
-            }
-            else if (signs[0] === "*" && signs[1] === "-") {
-                result1 = multiplication(values[0], values[1])
-                result2 = subtraction(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "*" && signs[1] === "+") {
-                result1 = multiplication(values[0], values[1])
-                result2 = addition(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "*" && signs[1] === "/") {
-                result1 = multiplication(values[0], values[1])
-                result2 = division(result1, values[2]);
-
-                return result2;
-            }
-            else if (signs[0] === "*" && signs[1] === "*") {
-                result1 = multiplication(values[0], values[1])
-                result2 = multiplication(result1, values[2]);
-
-                return result2;
-            }
-            else {
-                console.log("One or both symbol(s) given is NOT an operator!")
-            }
-        }
-        //IF THE STRING HAS ONLY TWO ARGUMENTS
-        else {
-            if (signs[0] === "^") {
-                result2 = exponent(values[0], values[1]);
-
-                return result2;
-            }
-            else if (signs[0] === "-") {
-                result2 = subtraction(values[0], values[1]);
-
-                return result2;
-            }
-            else if (signs[0] === "+") {
-                result2 = addition(values[0], values[1]);
-
-                return result2;
-            }
-            else if (signs[0] === "/") {
-                result2 = division(values[0], values[1]);
-
-                return result2;
-            }
-            else if (signs[0] === "*") {
-                result2 = multiplication(values[0], values[1]);
-
-                return result2;
-            }
-            else {
-                console.log("Symbol given is NOT an operator!")
-            }
-        }
-
-        //return result2
-    }
-
     console.log("");
     console.log("Javascript Calculator");
     setPrecision();
@@ -1682,8 +1653,6 @@ let calc = function () {
         console.log("Answer is undefined! Check input and try again.");
     }
 
-
-    //console.log(isMatchingBrackets(text));
 
     calc();
 }
